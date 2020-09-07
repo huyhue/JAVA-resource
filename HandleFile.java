@@ -195,4 +195,86 @@ public class HandleFile {
         String[] splitFile = path.split("\\");
         return splitFile[splitFile.length - 1];
     }
+    //-------------------------------------------------------------------------------------
+  //allow user copy text to new file
+    public static void coppyNewFile() {
+        String pathFileInput = Validation.checkInputPathFile();
+        String pathFileOutput = Validation.checkInputPathFile();
+        String content = getNewContent(pathFileInput); //lay noi dung tu file cu
+        System.out.println(content);
+        writeNewContent(pathFileOutput, content);
+    }
+
+  //get new content
+    public static String getNewContent(String pathFileInput) {
+        HashSet<String> newContent = new HashSet<>();
+        File file = new File(pathFileInput);
+        try {
+            Scanner input = new Scanner(file);
+            int count = 0;
+            while (input.hasNext()) {
+                String word = input.next();
+                newContent.add(word + " ");
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("Can’t read file");
+        }
+        String content = "";
+        for (String line : newContent) {
+            content += line;
+        }
+        return content;
+    }
+
+    //write new content to file
+    public static void writeNewContent(String pathFileOutput, String content) {
+        FileWriter fileWriter = null;
+        File file = new File(pathFileOutput);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            fileWriter = new FileWriter(file);
+            BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
+            bufferWriter.write(content);
+            bufferWriter.close();
+            System.err.println("Write successful");
+        } catch (IOException ex) {
+            System.err.println("Can’t write file");
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    //get list person by path file (doc file)
+    public static ArrayList<Person> getListPerson(String pathFile) {
+        ArrayList<Person> lp = new ArrayList<>();
+        File file = new File(pathFile);
+        //check file exist or not and path must be file
+        if (!file.exists() || !file.isFile()) {
+            System.err.println("Path doesn't exist");
+            return null;
+        }
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferReader.readLine()) != null) {
+                String[] infoPerson = line.split(";");
+                lp.add(new Person(infoPerson[0], infoPerson[1],
+                        getSalary(infoPerson[2])));
+
+            }
+        } catch (Exception e) {
+            System.err.println("Can't read file.");
+        }
+        return lp;
+    }
 }

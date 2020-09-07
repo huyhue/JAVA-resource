@@ -6,6 +6,65 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class AnalyzeString {
+//------------------------------------------------------------------------
+	String str = checkInputString(); //I AM a stuDENT in FPT uniVersity
+	System.out.println(handle(str)); //RESULT: I Am A Student In Fpt University
+	private static void handle(String str) {
+		String s = str.toLowerCase().trim();
+		s=s.replaceAll("\\s+"," ");
+		 StringBuffer stringBuffer = new StringBuffer(s);
+		for (int i = 0; i < stringBuffer.length()-1; i++) {
+			stringBuffer.setCharAt(0, Character.toUpperCase(stringBuffer.charAt(0)));
+			if (stringBuffer.charAt(i) == ' ') {
+				char after = stringBuffer.charAt(i + 1);
+				stringBuffer.setCharAt(i+1, Character.toUpperCase(after));
+			}
+		}
+		return stringBuffer.toString();
+	}
+//------------------------------------------------------------------------
+	/*Enter your content: heel heel no stop
+	{no=1, heel=2, stop=1}
+	{p=1, s=1, t=1, e=4, h=2, l=2, n=1, o=2}
+	*/
+	private Map<Character, Integer> charCounter = new HashMap<Character, Integer>();
+	private Map<String, Integer> wordCounter = new HashMap<String, Integer>();
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter your content: ");
+		String content = scanner.nextLine();
+		main counter = new main();
+		counter.analyze(content);
+		counter.display();
+	}
+
+	public void display() {
+		System.out.println(wordCounter);
+		System.out.println(charCounter);
+	}
+
+	public void analyze(String content) {
+		for (char ch : content.toCharArray()) {
+			if (Character.isSpaceChar(ch))
+				continue;
+			if (!charCounter.containsKey(ch)) {
+				charCounter.put(ch, 1);
+			} else {
+				charCounter.put(ch, ((int) charCounter.get(ch)) + 1);
+			}
+		}
+		StringTokenizer tokenizer = new StringTokenizer(content);
+		while (tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			if (!wordCounter.containsKey(token)) {
+				wordCounter.put(token, 1);
+			} else {
+				wordCounter.put(token, ((int) wordCounter.get(token)) + 1);
+			}
+		}
+	}
+//------------------------------------------------------------------------
     private static final Scanner in = new Scanner(System.in);
 
     private static boolean checkSquareNumber(int n) {

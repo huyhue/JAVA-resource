@@ -165,6 +165,19 @@ public static String checkInputPathFile() {
             System.out.print("Enter again: ");
         }
     }
+    
+    public static int checkInputExprience(int birthDate) {
+        int yearCurrent = Calendar.getInstance().get(Calendar.YEAR);
+        int age = yearCurrent - birthDate;
+        while (true) {
+            int yearExperience = checkInputIntLimit(1, 100);
+            if (yearExperience > age) {
+                System.err.println("Experience must be smaller than age");
+            } else {
+                return yearExperience;
+            }
+        }
+    }
 
     // check phone is number with minimum 10 characters
     public static String checkInputPhone() {
